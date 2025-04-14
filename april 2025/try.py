@@ -1,75 +1,33 @@
-class Solution(object):
-    def __init__(self):
-        self.palindromes = []
-        self.fact = [1] * 11
+x="daccad"
 
-    def make_palindrome(self, num, is_odd):
-        s = str(num)
-        result = s
-        idx = len(s) - 1
-        if is_odd:
-            idx -= 1
-        while idx >= 0:
-            result += s[idx]
-            idx -= 1
-        print(s,result)
-        return int(result)
+# def small_pal(x):
+#     y=sorted(x)
+#     op=""
+#     for i in range(0,len(y),2):
+#         op+=y[i]
+#     if len(y)%2==0:
+#         op+=op[::-1]
+#     else:
+#         op+=op[:-1][::-1]
+#     return op
+#     # wrong because for "yey" i get "eye" , it should be "yey"
+from collections import Counter
 
 
+def small_pal(s):
+    freq=Counter(s)
+    mid=""
+    op=""
+    for k in sorted(freq.keys()):
+        if freq[k]%2==0:
+            op+=freq[k]//2*k
+        else:
+            op+=freq[k]//2*k
+            mid+=k
+    if len(s)%2==0:
+        op+=op[::-1]
+    else:
+        op+=mid+op[::-1]
+    return op
 
-    def generate_palindromes(self, n, k):# n=3,k=5
-        half = (n + 1) // 2
-        start = 10**(half - 1)
-        end = 10**half
-        for i in range(start, end):
-            palindrome = self.make_palindrome(i, n % 2)
-            if palindrome % k == 0:
-                self.palindromes.append(palindrome)
-
-    def count_valid_permutations(self, s):
-        from collections import Counter
-
-        frequency = Counter(s)
-        print(frequency)
-        total_permutations = self.fact[len(s)]
-        for count in frequency.values():
-            total_permutations //= self.fact[count]
-# ----------------------------------
-        if '0' in frequency and frequency['0'] > 0:
-            frequency['0'] -= 1
-            invalid_permutations = self.fact[len(s) - 1]
-            for count in frequency.values():
-                invalid_permutations //= self.fact[count]
-            total_permutations -= invalid_permutations
-
-        return total_permutations
-
-    def initialize_factorials(self):
-        for i in range(2, 11):
-            self.fact[i] = self.fact[i - 1] * i
-
-    def countGoodIntegers(self, n, k):
-        """
-        :type n: int
-        :type k: int
-        :rtype: int
-        """
-        self.palindromes = []
-        self.initialize_factorials()
-        self.generate_palindromes(n, k)
-        print(self.palindromes)
-        total_count = 0
-        unique_permutations = set()
-
-        for palindrome in self.palindromes:
-            s = str(palindrome)
-            sorted_s = ''.join(sorted(s))
-            if sorted_s not in unique_permutations:
-                unique_permutations.add(sorted_s)
-                total_count += self.count_valid_permutations(sorted_s)
-        return total_count
-
-
-if __name__ == '__main__':
-    solution = Solution()
-    print(solution.countGoodIntegers(3, 5))
+print(small_pal(x))
