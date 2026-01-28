@@ -6,3 +6,4 @@
     - Write code
     - Dry run 1 bad case
     - Submit
+    - practice it again after some days
